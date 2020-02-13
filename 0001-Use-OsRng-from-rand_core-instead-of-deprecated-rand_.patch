@@ -1,0 +1,53 @@
+From c4120628c2432c1bca536c96c868a3e70fd4eaae Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Fri, 13 Sep 2019 23:44:58 +0200
+Subject: [PATCH] Use OsRng from rand_core instead of deprecated rand_os
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ Cargo.toml             | 4 -+
+ src/lib.rs             | 1 -
+ src/stats/rand_util.rs | 3 +--
+ 3 files changed, 2 insertion(+), 6 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index fa826dd..d3558c6 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -58,9 +58,7 @@ version = "0.2"
+ version = "0.5"
+ default-features = false
+ 
+-[dependencies.rand_os]
+-version = "0.2"
+-
++features = ["getrandom"]
+ [dependencies.rand_xoshiro]
+ version = "0.4"
+ 
+diff --git a/src/lib.rs b/src/lib.rs
+index 62154f4..9fb2453 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -52,7 +52,6 @@ extern crate csv;
+ extern crate itertools;
+ extern crate num_traits;
+ extern crate rand_core;
+-extern crate rand_os;
+ extern crate rand_xoshiro;
+ extern crate rayon;
+ extern crate serde;
+diff --git a/src/stats/rand_util.rs b/src/stats/rand_util.rs
+index c1d4ba2..7400531 100644
+--- a/src/stats/rand_util.rs
++++ b/src/stats/rand_util.rs
+@@ -1,5 +1,4 @@
+-use rand_core::{RngCore, SeedableRng};
+-use rand_os::OsRng;
++use rand_core::{OsRng, RngCore, SeedableRng};
+ use rand_xoshiro::Xoshiro256StarStar;
+ 
+ use std::cell::RefCell;
